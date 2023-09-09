@@ -20,23 +20,24 @@ import com.example.docwatcher.components.zoomimage.ZoomableImageUtil.isSupported
  * Created by Sudhanshu Kumar on 05/09/23.
  */
 
-class PhotoViewerAttacher(val imageView: ImageView) : View.OnTouchListener,
+class PhotoViewerAttacher(private val imageView: ImageView) : View.OnTouchListener,
     View.OnLayoutChangeListener {
 
-    private val DEFAULT_MAX_SCALE = 3.0f
-    private val DEFAULT_MID_SCALE = 1.75f
-    private val DEFAULT_MIN_SCALE = 1.0f
-    private val DEFAULT_ZOOM_DURATION = 200
-
-    private val HORIZONTAL_EDGE_NONE = -1
-    private val HORIZONTAL_EDGE_LEFT = 0
-    private val HORIZONTAL_EDGE_RIGHT = 1
-    private val HORIZONTAL_EDGE_BOTH = 2
-    private val VERTICAL_EDGE_NONE = -1
-    private val VERTICAL_EDGE_TOP = 0
-    private val VERTICAL_EDGE_BOTTOM = 1
-    private val VERTICAL_EDGE_BOTH = 2
-    private val SINGLE_TOUCH = 1
+    companion object {
+        private const val DEFAULT_MAX_SCALE = 3.0f
+        private const val DEFAULT_MID_SCALE = 1.75f
+        private const val DEFAULT_MIN_SCALE = 1.0f
+        private const val DEFAULT_ZOOM_DURATION = 200
+        private const val HORIZONTAL_EDGE_NONE = -1
+        private const val HORIZONTAL_EDGE_LEFT = 0
+        private const val HORIZONTAL_EDGE_RIGHT = 1
+        private const val HORIZONTAL_EDGE_BOTH = 2
+        private const val VERTICAL_EDGE_NONE = -1
+        private const val VERTICAL_EDGE_TOP = 0
+        private const val VERTICAL_EDGE_BOTTOM = 1
+        private const val VERTICAL_EDGE_BOTH = 2
+        private const val SINGLE_TOUCH = 1
+    }
 
     private var mInterpolator: Interpolator = AccelerateDecelerateInterpolator()
     private var mZoomDuration = DEFAULT_ZOOM_DURATION
