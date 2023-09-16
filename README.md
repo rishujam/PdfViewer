@@ -11,13 +11,25 @@ Key features:
 
 ## Screenshot
 
-![ss](https://github.com/rishujam/PdfViewer/assets/74773876/8bf16c61-3158-400a-aa5e-85b2291aa01a)
+![ss](https://github.com/rishujam/PdfViewer/assets/74773876/8bf16c61-3158-400a-aa5e-85b2291aa01a) =250x520
 
 ## Installation
 
+settings.gradle:
+```
+allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+```
+
 To get started, add the library to your Android project by including it as a dependency. You can do this by adding the following lines to your app's `build.gradle` file:
 
-```gradle
+gradle
+```
 dependencies {
     implementation 'com.github.rishujam:PdfViewer:1.3'
 }
+```
