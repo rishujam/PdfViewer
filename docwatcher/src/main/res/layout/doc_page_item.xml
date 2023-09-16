@@ -4,12 +4,11 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
-	<com.example.docwatcher.components.ZoomImageView
+	<com.example.docwatcher.components.ZoomView
 		android:id="@+id/zoomPdfImage"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		app:layout_constraintDimensionRatio="1:1.41"
-		android:scaleType="fitCenter"
 		app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
