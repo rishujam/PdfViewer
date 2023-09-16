@@ -11,7 +11,7 @@ Key features:
 
 ## Screenshot
 
-![ss](https://github.com/rishujam/PdfViewer/assets/74773876/8bf16c61-3158-400a-aa5e-85b2291aa01a) =250x520
+![](https://github.com/rishujam/PdfViewer/assets/74773876/8bf16c61-3158-400a-aa5e-85b2291aa01a =250x520) 
 
 ## Installation
 
