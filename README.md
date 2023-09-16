@@ -33,3 +33,26 @@ dependencies {
     implementation 'com.github.rishujam:PdfViewer:1.3'
 }
 ```
+## Demo
+
+XML File
+```
+    <com.example.docwatcher.DocView
+		android:id="@+id/docView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
+```
+Fragment/Activity
+```
+    companion object {
+        private const val PATH = "/data/data/com.example.pdfviewer/files/sample_pdf.pdf"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.docView.setData(PATH)
+    }
+```
