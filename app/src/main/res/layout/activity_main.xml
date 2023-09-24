@@ -11,5 +11,19 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
 
+	<ProgressBar
+		style="?android:attr/progressBarStyleHorizontal"
+		android:id="@+id/pbPdf"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:visibility="gone"
+		android:elevation="10dp"
+		android:layout_marginHorizontal="64dp"
+		android:indeterminateTint="@color/black"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

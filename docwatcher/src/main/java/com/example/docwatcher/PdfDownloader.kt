@@ -5,9 +5,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.ContentObserver
 import android.net.Uri
+import android.os.Build
+import android.os.Handler
+import android.os.Looper
+import android.provider.MediaStore
 import android.util.Log
-import java.io.File
+import androidx.core.net.toUri
 
 /*
  * Created by Sudhanshu Kumar on 24/09/23.
@@ -15,45 +20,56 @@ import java.io.File
 
 class PdfDownloader(
     private val context: Context,
-    private val downloadListener: DocView.DownloadListener
+    private val listener: DocView.DownloadListener
 ) {
 
-    private var downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-    private var downloadID: Long = -1
+    companion object {
+        private const val TAG = "DownloadUrl"
+    }
 
-    private val downloadReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val action = intent?.action
-            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE == action) {
-                val query = DownloadManager.Query().setFilterById(downloadID)
+    private val downloadManager = context.getSystemService(DownloadManager::class.java)
+
+    fun download(url: String) {
+        val request = DownloadManager.Request(url.toUri())
+            .setMimeType("application/pdf")
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            .setTitle("pdfDownloader")
+            .setDestinationInExternalFilesDir(context, null, "downloaded.pdf")
+        val downloadID = downloadManager.enqueue(request)
+        val query = DownloadManager.Query().setFilterById(downloadID)
+        val handler = Handler(Looper.getMainLooper())
+        val observer = object : ContentObserver(handler) {
+            override fun onChange(selfChange: Boolean) {
+                super.onChange(selfChange)
+
                 val cursor = downloadManager.query(query)
-                if (cursor.moveToFirst()) {
-                    val columnIndex = cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)
+                if(cursor != null && cursor.moveToFirst()) {
+                    val downloaded = cursor.getLong(cursor.getColumnIndexOrThrow(
+                        DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR
+                    ))
+                    val total = cursor.getLong(cursor.getColumnIndexOrThrow(
+                        DownloadManager.COLUMN_TOTAL_SIZE_BYTES
+                    ))
+                    val columnIndex = cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS)
                     val status = cursor.getInt(columnIndex)
-                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                    val percentage = (downloaded * 100) / total
+                    listener.onProgress(percentage)
+                    Log.d(TAG, "percentage: $percentage")
+                    if(status == DownloadManager.STATUS_SUCCESSFUL) {
+                        Log.d(TAG, "status: Success")
                         val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
                         val localUri = cursor.getString(uriIndex)
                         val downloadedFile = Uri.parse(localUri).path
-                        Log.d("PdfDownloader", downloadedFile.toString())
-                        downloadListener.onCompleted(downloadedFile)
-                    } else if (status == DownloadManager.STATUS_FAILED) {
-                        Log.d("PdfDownloader", "Download FAILED")
+                        listener.onCompleted(downloadedFile)
+                    } else if(status == DownloadManager.STATUS_FAILED) {
+                        listener.onFailed("Error")
+                        Log.d(TAG, "status: Failed")
                     }
                 }
-                cursor.close()
             }
         }
-    }
-
-    fun download(url: String) {
-        val request = DownloadManager.Request(Uri.parse(url))
-        request.setTitle("PDF Download")
-        request.setDescription("Downloading a PDF file")
-        request.setDestinationInExternalFilesDir(context, null, "sample.pdf")
-
-        downloadID = downloadManager.enqueue(request)
-        val filter = IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
-        context.registerReceiver(downloadReceiver, filter)
+        val scanUri = "content://downloads/my_downloads"
+        context.contentResolver.registerContentObserver(Uri.parse(scanUri), true, observer)
     }
 
 }

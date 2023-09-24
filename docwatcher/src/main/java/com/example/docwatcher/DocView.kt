@@ -9,11 +9,13 @@ import android.os.ParcelFileDescriptor
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.docwatcher.model.PdfUiModel
+import com.example.docwatcher.state.DownloadState
 import com.example.docwatcher.type.PdfPathType
 import com.example.docwatcher.util.show
 import com.example.docwatcher.util.showPagesViewForSomeSeconds
@@ -37,6 +39,7 @@ class DocView @JvmOverloads constructor(
     private var pageCard: CardView
     private var rv: RecyclerView
     private lateinit var pdfDownloader: PdfDownloader
+    private var downloadCompletedBlock: ((DownloadState) -> Unit)? = null
 
     init {
         removeAllViews()
@@ -55,6 +58,10 @@ class DocView @JvmOverloads constructor(
         }
     }
 
+    fun setDownloadStateChangeListener(block: (DownloadState) -> Unit) {
+        downloadCompletedBlock = block
+    }
+
     fun loadData(uri: String, pathType: PdfPathType) {
         when(pathType) {
             is PdfPathType.InternalStorage -> {
@@ -66,7 +73,16 @@ class DocView @JvmOverloads constructor(
             is PdfPathType.Internet -> {
                 val listener = object : DownloadListener {
                     override fun onCompleted(path: String?) {
+                        downloadCompletedBlock?.let { it(DownloadState.Completed) }
                         setData(path.toString())
+                    }
+
+                    override fun onFailed(message: String) {
+                        downloadCompletedBlock?.let { it(DownloadState.Error(message)) }
+                    }
+
+                    override fun onProgress(progress: Long) {
+                        downloadCompletedBlock?.let { it(DownloadState.InProgress(progress)) }
                     }
                 }
                 pdfDownloader = PdfDownloader(context, listener)
@@ -115,6 +131,10 @@ class DocView @JvmOverloads constructor(
 
     interface DownloadListener {
         fun onCompleted(path: String?)
+
+        fun onFailed(message: String)
+
+        fun onProgress(progress: Long)
     }
 
 }
