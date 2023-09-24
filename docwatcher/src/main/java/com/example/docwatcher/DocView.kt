@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.docwatcher.model.PdfUiModel
+import com.example.docwatcher.type.PdfPathType
 import com.example.docwatcher.util.show
 import com.example.docwatcher.util.showPagesViewForSomeSeconds
 import kotlinx.coroutines.CoroutineScope
@@ -35,6 +36,7 @@ class DocView @JvmOverloads constructor(
     private var pageText: TextView
     private var pageCard: CardView
     private var rv: RecyclerView
+    private lateinit var pdfDownloader: PdfDownloader
 
     init {
         removeAllViews()
@@ -53,7 +55,27 @@ class DocView @JvmOverloads constructor(
         }
     }
 
-    fun setData(uri: String) {
+    fun loadData(uri: String, pathType: PdfPathType) {
+        when(pathType) {
+            is PdfPathType.InternalStorage -> {
+                setData(uri)
+            }
+            is PdfPathType.ExternalStorage -> {
+
+            }
+            is PdfPathType.Internet -> {
+                val listener = object : DownloadListener {
+                    override fun onCompleted(path: String?) {
+                        setData(path.toString())
+                    }
+                }
+                pdfDownloader = PdfDownloader(context, listener)
+                pdfDownloader.download(uri)
+            }
+        }
+    }
+
+    private fun setData(uri: String) {
         val list = generateBitmaps(uri)
         noOfPages = list.size.toString()
         pdfAdapter.differ.submitList(list)
@@ -89,6 +111,10 @@ class DocView @JvmOverloads constructor(
         }
         renderer.close()
         return output
+    }
+
+    interface DownloadListener {
+        fun onCompleted(path: String?)
     }
 
 }
