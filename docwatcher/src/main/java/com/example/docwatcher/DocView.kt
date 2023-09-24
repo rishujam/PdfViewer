@@ -34,34 +34,22 @@ class DocView @JvmOverloads constructor(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
     private var pageText: TextView
     private var pageCard: CardView
+    private var rv: RecyclerView
 
     init {
         removeAllViews()
         LayoutInflater.from(context).inflate(R.layout.doc_view, this, true)
         pageText = findViewById(R.id.tvPageNo)
         pageCard = findViewById(R.id.cdPages)
+        rv = findViewById(R.id.pdfRv)
         setupRecyclerView()
     }
 
     private fun setupRecyclerView() {
         pdfAdapter = PDFAdapter()
-        val rv = findViewById<RecyclerView>(R.id.pdfRv)
         rv.apply {
             adapter = pdfAdapter
             layoutManager = LinearLayoutManager(context)
-            setOnScrollChangeListener { _, _, _, _, _ ->
-                val visiblePosition = (layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-                if(visiblePosition != -1) {
-                    val currPage = visiblePosition + 1
-                    if(!noOfPages.isNullOrEmpty()) {
-                        pageCard.show()
-                        val text = "$currPage / $noOfPages"
-                        pageText.text = text
-                        pageCard.showPagesViewForSomeSeconds(coroutineScope, context)
-                    }
-                }
-
-            }
         }
     }
 
@@ -69,8 +57,21 @@ class DocView @JvmOverloads constructor(
         val list = generateBitmaps(uri)
         noOfPages = list.size.toString()
         pdfAdapter.differ.submitList(list)
-        pageCard.show()
+        val cardText = "1 / ${list.size}"
+        pageText.text = cardText
         pageCard.showPagesViewForSomeSeconds(coroutineScope, context)
+        rv.setOnScrollChangeListener { _, _, _, _, _ ->
+            val visiblePosition = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+            if(visiblePosition != -1) {
+                val currPage = visiblePosition + 1
+                if(!noOfPages.isNullOrEmpty()) {
+                    pageCard.show()
+                    val text = "$currPage / $noOfPages"
+                    pageText.text = text
+                    pageCard.showPagesViewForSomeSeconds(coroutineScope, context)
+                }
+            }
+        }
     }
 
     private fun generateBitmaps(uri: String): List<PdfUiModel> {
