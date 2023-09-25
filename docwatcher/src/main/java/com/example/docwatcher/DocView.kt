@@ -2,18 +2,16 @@ package com.example.docwatcher
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.docwatcher.data.PdfDownloader
 import com.example.docwatcher.model.PdfUiModel
 import com.example.docwatcher.state.DownloadState
 import com.example.docwatcher.type.PdfPathType

@@ -12,7 +12,7 @@ import com.example.docwatcher.model.PdfUiModel
  * Created by Sudhanshu Kumar on 04/09/23.
  */
 
-class PDFAdapter : RecyclerView.Adapter<PDFAdapter.PDFViewHolder>() {
+internal class PDFAdapter : RecyclerView.Adapter<PDFAdapter.PDFViewHolder>() {
 
     inner class PDFViewHolder (val binding: DocPageItemBinding): RecyclerView.ViewHolder(binding.root)
 

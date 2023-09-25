@@ -18,7 +18,7 @@ import kotlin.math.sqrt
  * Created by Sudhanshu Kumar on 08/09/23.
  */
 
-class ZoomView @JvmOverloads constructor(
+internal class ZoomView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

@@ -15,25 +15,22 @@
 
 	<androidx.cardview.widget.CardView
 		android:id="@+id/cdPages"
-		android:layout_width="64dp"
-		android:layout_height="64dp"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
 		app:cardCornerRadius="8dp"
 		android:visibility="gone"
+		android:background="@color/soft_grey"
 		android:layout_marginTop="16dp"
 		android:layout_marginEnd="16dp"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="@id/pdfRv">
-
-		<ImageView
-			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:background="@color/soft_grey" />
 
 		<TextView
 			android:id="@+id/tvPageNo"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_gravity="center"
+			android:padding="8dp"
 			android:textSize="18sp"
 			android:textColor="@color/black"/>
 
