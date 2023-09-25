@@ -39,6 +39,9 @@ internal class ZoomView @JvmOverloads constructor(
     private val mSuppMatrix = Matrix()
     private val mMatrixValues = FloatArray(9)
     private val mDisplayRect = RectF()
+    private var lastTouchX = 0f
+    private var lastTouchY = 0f
+    private var isDragging = false
 
     private val mScaleGestureListener = object : ScaleGestureDetector.OnScaleGestureListener {
 
@@ -76,7 +79,7 @@ internal class ZoomView @JvmOverloads constructor(
         setOnTouchListener()
         mScaleDetector = ScaleGestureDetector(context, mScaleGestureListener)
         scaleType = ScaleType.MATRIX
-        addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+        addOnLayoutChangeListener { _, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
             if (left != oldLeft || top != oldTop || right != oldRight || bottom != oldBottom) {
                 updateBaseMatrix()
             }
@@ -87,10 +90,33 @@ internal class ZoomView @JvmOverloads constructor(
         setOnTouchListener { v, ev ->
             when (ev.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    lastTouchX = ev.x
+                    lastTouchY = ev.y
+                    isDragging = false
+                }
 
+                MotionEvent.ACTION_MOVE -> {
+                    if (getScale() > MIN_SCALE) {
+                        this@ZoomView.parent?.requestDisallowInterceptTouchEvent(true)
+                        val dx = ev.x - lastTouchX
+                        val dy = ev.y - lastTouchY
+
+                        if (!isDragging) {
+                            isDragging = sqrt(dx * dx + dy * dy) >= 10f
+                        }
+                        if (isDragging) {
+                            mSuppMatrix.postTranslate(dx, dy)
+                            if (checkMatrixBounds()) {
+                                imageMatrix = getDrawMatrix()
+                            }
+                        }
+                        lastTouchX = ev.x
+                        lastTouchY = ev.y
+                    }
                 }
 
                 MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                    this@ZoomView.parent?.requestDisallowInterceptTouchEvent(false)
                     if (getScale() < MIN_SCALE) {
                         val rect = getDisplayRect()
                         if (rect != null) {
@@ -112,6 +138,7 @@ internal class ZoomView @JvmOverloads constructor(
                             )
                         }
                     }
+                    isDragging = false
                     v.performClick()
                 }
             }

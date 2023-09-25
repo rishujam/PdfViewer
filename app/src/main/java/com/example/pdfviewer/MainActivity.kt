@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import com.example.docwatcher.state.DownloadState
-import com.example.docwatcher.type.PdfPathType
 import com.example.pdfviewer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -27,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         binding
         binding.docView.loadData(
             INTERNET_PATH,
-            PdfPathType.Internet,
+            true,
         )
         binding.pbPdf.visibility = View.VISIBLE
         binding.docView.setDownloadStateChangeListener {

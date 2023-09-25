@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.docwatcher.data.PdfDownloader
 import com.example.docwatcher.model.PdfUiModel
 import com.example.docwatcher.state.DownloadState
-import com.example.docwatcher.type.PdfPathType
 import com.example.docwatcher.util.show
 import com.example.docwatcher.util.showPagesViewForSomeSeconds
 import kotlinx.coroutines.CoroutineScope
@@ -60,32 +59,26 @@ class DocView @JvmOverloads constructor(
         downloadCompletedBlock = block
     }
 
-    fun loadData(uri: String, pathType: PdfPathType) {
-        when(pathType) {
-            is PdfPathType.InternalStorage -> {
-                setData(uri)
-            }
-            is PdfPathType.ExternalStorage -> {
-
-            }
-            is PdfPathType.Internet -> {
-                val listener = object : DownloadListener {
-                    override fun onCompleted(path: String?) {
-                        downloadCompletedBlock?.let { it(DownloadState.Completed) }
-                        setData(path.toString())
-                    }
-
-                    override fun onFailed(message: String) {
-                        downloadCompletedBlock?.let { it(DownloadState.Error(message)) }
-                    }
-
-                    override fun onProgress(progress: Long) {
-                        downloadCompletedBlock?.let { it(DownloadState.InProgress(progress)) }
-                    }
+    fun loadData(uri: String, fromInternet: Boolean) {
+        if(!fromInternet) {
+            setData(uri)
+        } else {
+            val listener = object : DownloadListener {
+                override fun onCompleted(path: String?) {
+                    downloadCompletedBlock?.let { it(DownloadState.Completed) }
+                    setData(path.toString())
                 }
-                pdfDownloader = PdfDownloader(context, listener)
-                pdfDownloader.download(uri)
+
+                override fun onFailed(message: String) {
+                    downloadCompletedBlock?.let { it(DownloadState.Error(message)) }
+                }
+
+                override fun onProgress(progress: Long) {
+                    downloadCompletedBlock?.let { it(DownloadState.InProgress(progress)) }
+                }
             }
+            pdfDownloader = PdfDownloader(context, listener)
+            pdfDownloader.download(uri)
         }
     }
 
