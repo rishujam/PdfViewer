@@ -30,7 +30,7 @@ To get started, add the library to your Android project by including it as a dep
 gradle
 ```
 dependencies {
-    implementation 'com.github.rishujam:PdfViewer:1.3'
+    implementation 'com.github.rishujam:PdfViewer:1.4'
 }
 ```
 ## How to use
