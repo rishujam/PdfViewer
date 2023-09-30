@@ -73,8 +73,8 @@ class DocView @JvmOverloads constructor(
                     downloadCompletedBlock?.let { it(DownloadState.Error(message)) }
                 }
 
-                override fun onProgress(progress: Long) {
-                    downloadCompletedBlock?.let { it(DownloadState.InProgress(progress)) }
+                override fun onProgress(progress: Long, totalSize: Long) {
+                    downloadCompletedBlock?.let { it(DownloadState.InProgress(progress, totalSize)) }
                 }
             }
             pdfDownloader = PdfDownloader(context, listener)
@@ -125,7 +125,7 @@ class DocView @JvmOverloads constructor(
 
         fun onFailed(message: String)
 
-        fun onProgress(progress: Long)
+        fun onProgress(progress: Long, totalSize: Long)
     }
 
 }

@@ -6,6 +6,7 @@ import android.database.ContentObserver
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import androidx.core.net.toUri
 import com.example.docwatcher.DocView
 
@@ -30,34 +31,44 @@ internal class PdfDownloader(
         val query = DownloadManager.Query().setFilterById(downloadID)
         val handler = Handler(Looper.getMainLooper())
         val observer = object : ContentObserver(handler) {
+
             override fun onChange(selfChange: Boolean) {
                 super.onChange(selfChange)
 
                 val cursor = downloadManager.query(query)
-                if(cursor != null && cursor.moveToFirst()) {
-                    val downloaded = cursor.getLong(cursor.getColumnIndexOrThrow(
-                        DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR
-                    ))
-                    val total = cursor.getLong(cursor.getColumnIndexOrThrow(
-                        DownloadManager.COLUMN_TOTAL_SIZE_BYTES
-                    ))
+                if (cursor != null && cursor.moveToFirst()) {
+                    val downloaded = cursor.getLong(
+                        cursor.getColumnIndexOrThrow(
+                            DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR
+                        )
+                    )
+                    val total = cursor.getLong(
+                        cursor.getColumnIndexOrThrow(
+                            DownloadManager.COLUMN_TOTAL_SIZE_BYTES
+                        )
+                    )
                     val columnIndex = cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS)
                     val status = cursor.getInt(columnIndex)
                     val percentage = (downloaded * 100) / total
-                    listener.onProgress(percentage)
-                    if(status == DownloadManager.STATUS_SUCCESSFUL) {
+                    listener.onProgress(percentage, total)
+                    if (status == DownloadManager.STATUS_SUCCESSFUL) {
                         val uriIndex = cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI)
                         val localUri = cursor.getString(uriIndex)
                         val downloadedFile = Uri.parse(localUri).path
                         listener.onCompleted(downloadedFile)
-                    } else if(status == DownloadManager.STATUS_FAILED) {
+                    } else if (status == DownloadManager.STATUS_FAILED) {
                         listener.onFailed("Error")
                     }
                 }
             }
+
         }
         val scanUri = "content://downloads/my_downloads"
-        context.contentResolver.registerContentObserver(Uri.parse(scanUri), true, observer)
+        context.contentResolver.registerContentObserver(
+            Uri.parse(scanUri),
+            true,
+            observer
+        )
     }
 
 }

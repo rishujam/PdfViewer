@@ -8,6 +8,6 @@ sealed class DownloadState {
 
     data class Error(val message: String) : DownloadState()
     object Completed : DownloadState()
-    data class InProgress(val progress: Long) : DownloadState()
+    data class InProgress(val progress: Long, val totalSize: Long) : DownloadState()
 
 }
