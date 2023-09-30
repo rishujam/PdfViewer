@@ -2,10 +2,11 @@
 
 ## Overview
 
-This Android library provides a lightweight and easy-to-use PDF viewer for local PDF files within your Android applications. It allows users to view PDF documents stored locally on their devices. Whether you want to include a PDF viewer in your app for reading documents or displaying user manuals, this library simplifies the integration process.
+This Android library provides a lightweight and easy-to-use PDF viewer for local and online PDF files within your Android applications. Whether you want to include a PDF viewer in your app for reading documents or displaying user manuals, this library simplifies the integration process.
 
 Key features:
 - View local PDF files.
+- View online PDF files.
 - Smooth and intuitive user interface.
 - Pinch to zoom
 
