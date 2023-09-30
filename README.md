@@ -33,7 +33,7 @@ dependencies {
     implementation 'com.github.rishujam:PdfViewer:1.3'
 }
 ```
-## Demo
+## How to use
 
 XML File
 ```
@@ -46,6 +46,8 @@ Fragment/Activity
 ```
     companion object {
         private const val PATH = "/data/data/com.example.pdfviewer/files/sample_pdf.pdf"
+	private const val INTERNET_PATH =
+            "https://research.nhm.org/pdfs/10840/10840-001.pdf"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +55,27 @@ Fragment/Activity
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.docView.setData(PATH)
+        binding.docView.loadData(
+            uri = INTERNET_PATH, 
+            fromInternet = true,
+        ) //If the path specified is a url you must set fromInternet value to true else set it to false.
+
+	//You can set download progress listener using this function
+	binding.docView.setDownloadStateChangeListener {
+            when (it) {
+                is DownloadState.Error -> {
+                    Toast.makeText(this, it.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is DownloadState.Completed -> {
+                    //Do something..
+                }
+
+                is DownloadState.InProgress -> {
+                    val totalFileSizeInBytes = it.totalSize
+                    val progress = it.progress
+                }
+            }
+        }
     }
 ```
