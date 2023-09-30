@@ -56,12 +56,15 @@ Fragment/Activity
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+	//If the path specified is a url you must set fromInternet value to true else set it to false.
+
         binding.docView.loadData(
             uri = INTERNET_PATH, 
             fromInternet = true,
-        ) //If the path specified is a url you must set fromInternet value to true else set it to false.
+        ) 
 
-	//You can set download progress listener using this function
+	// If you are loading pdf from url you can easily track progress using this function
+
 	binding.docView.setDownloadStateChangeListener {
             when (it) {
                 is DownloadState.Error -> {
