@@ -4,9 +4,9 @@ import android.app.DownloadManager
 import android.content.Context
 import android.database.ContentObserver
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import androidx.core.net.toUri
 import com.docs.docwatcher.DocView
 
@@ -19,7 +19,11 @@ internal class PdfDownloader(
     private val listener: DocView.DownloadListener
 ) {
 
-    private val downloadManager = context.getSystemService(DownloadManager::class.java)
+    private val downloadManager = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+        context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+    } else {
+        context.getSystemService(DownloadManager::class.java)
+    }
 
     fun download(url: String) {
         val request = DownloadManager.Request(url.toUri())

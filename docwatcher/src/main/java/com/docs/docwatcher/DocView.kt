@@ -3,6 +3,7 @@ package com.docs.docwatcher
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
+import android.os.Build
 import android.os.ParcelFileDescriptor
 import android.util.AttributeSet
 import android.view.LayoutInflater
@@ -90,16 +91,30 @@ class DocView @JvmOverloads constructor(
         val cardText = "1 / ${list.size}"
         pageText.text = cardText
         pageCard.showPagesViewForSomeSeconds(coroutineScope, context)
-        rv.setOnScrollChangeListener { _, _, _, _, _ ->
-            val visiblePosition = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
-            if(visiblePosition != -1) {
-                val currPage = visiblePosition + 1
-                if(!noOfPages.isNullOrEmpty()) {
-                    pageCard.show()
-                    val text = "$currPage / $noOfPages"
-                    pageText.text = text
-                    pageCard.showPagesViewForSomeSeconds(coroutineScope, context)
+        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M) {
+            rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    handleOnScroll()
                 }
+            })
+        } else {
+            rv.setOnScrollChangeListener { _, _, _, _, _ ->
+                handleOnScroll()
+            }
+        }
+    }
+
+    private fun handleOnScroll() {
+        val visiblePosition = (rv.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+        if(visiblePosition != -1) {
+            val currPage = visiblePosition + 1
+            if(!noOfPages.isNullOrEmpty()) {
+                pageCard.show()
+                val text = "$currPage / $noOfPages"
+                pageText.text = text
+                pageCard.showPagesViewForSomeSeconds(coroutineScope, context)
             }
         }
     }

@@ -44,7 +44,3 @@ internal fun View.show() {
 internal fun View.gone() {
     this.visibility = View.GONE
 }
-
-internal fun View.invisible() {
-    this.visibility = View.INVISIBLE
-}
