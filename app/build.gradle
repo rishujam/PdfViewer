@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.pdfviewer'
+    namespace 'com.docs.pdfviewer'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.pdfviewer"
+        applicationId "com.docs.pdfviewer"
         minSdk 26
         targetSdk 33
         versionCode 1

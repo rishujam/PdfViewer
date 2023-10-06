@@ -1,17 +1,17 @@
-package com.example.pdfviewer
+package com.docs.pdfviewer
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import com.example.docwatcher.state.DownloadState
-import com.example.pdfviewer.databinding.ActivityMainBinding
+import com.docs.docwatcher.state.DownloadState
+import com.docs.pdfviewer.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val INTERNAL_STORAGE_PATH =
-            "/data/data/com.example.pdfviewer/files/sample_pdf.pdf"
+            "/data/data/com.docs.pdfviewer/files/sample_pdf.pdf"
         private const val INTERNET_PATH =
             "https://research.nhm.org/pdfs/10840/10840-001.pdf"
         private const val EXTERNAL_STORAGE_PATH = ""

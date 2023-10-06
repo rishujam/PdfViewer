@@ -1,4 +1,4 @@
-package com.example.pdfviewer
+package com.docs.docwatcher
 
 import org.junit.Test
 

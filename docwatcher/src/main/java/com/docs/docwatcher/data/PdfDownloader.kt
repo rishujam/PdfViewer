@@ -1,4 +1,4 @@
-package com.example.docwatcher.data
+package com.docs.docwatcher.data
 
 import android.app.DownloadManager
 import android.content.Context
@@ -8,7 +8,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.core.net.toUri
-import com.example.docwatcher.DocView
+import com.docs.docwatcher.DocView
 
 /*
  * Created by Sudhanshu Kumar on 24/09/23.

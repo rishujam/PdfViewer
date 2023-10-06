@@ -1,4 +1,4 @@
-package com.example.docwatcher
+package com.docs.docwatcher
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -11,11 +11,12 @@ import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.docwatcher.data.PdfDownloader
-import com.example.docwatcher.model.PdfUiModel
-import com.example.docwatcher.state.DownloadState
-import com.example.docwatcher.util.show
-import com.example.docwatcher.util.showPagesViewForSomeSeconds
+import com.doc.docwatcher.R
+import com.docs.docwatcher.data.PdfDownloader
+import com.docs.docwatcher.model.PdfUiModel
+import com.docs.docwatcher.state.DownloadState
+import com.docs.docwatcher.util.show
+import com.docs.docwatcher.util.showPagesViewForSomeSeconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import java.io.File

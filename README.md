@@ -38,7 +38,7 @@ dependencies {
 
 XML File
 ```
-    <com.example.docwatcher.DocView
+    <com.docs.docwatcher.DocView
 		android:id="@+id/docView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
@@ -46,7 +46,7 @@ XML File
 Fragment/Activity
 ```
     companion object {
-        private const val PATH = "/data/data/com.example.pdfviewer/files/sample_pdf.pdf"
+        private const val PATH = "/data/data/com.docs.pdfviewer/files/sample_pdf.pdf"
 	private const val INTERNET_PATH =
             "https://research.nhm.org/pdfs/10840/10840-001.pdf"
     }

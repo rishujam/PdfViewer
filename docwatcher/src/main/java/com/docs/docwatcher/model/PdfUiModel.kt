@@ -1,4 +1,4 @@
-package com.example.docwatcher.model
+package com.docs.docwatcher.model
 
 import android.graphics.Bitmap
 

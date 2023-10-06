@@ -1,4 +1,4 @@
-package com.example.docwatcher.state
+package com.docs.docwatcher.state
 
 /*
  * Created by Sudhanshu Kumar on 24/09/23.

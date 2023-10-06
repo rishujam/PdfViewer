@@ -1,4 +1,4 @@
-package com.example.docwatcher.components
+package com.docs.docwatcher.components
 
 import android.content.Context
 import android.graphics.Matrix

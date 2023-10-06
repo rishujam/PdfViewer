@@ -1,12 +1,12 @@
-package com.example.docwatcher
+package com.docs.docwatcher
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.docwatcher.databinding.DocPageItemBinding
-import com.example.docwatcher.model.PdfUiModel
+import com.doc.docwatcher.databinding.DocPageItemBinding
+import com.docs.docwatcher.model.PdfUiModel
 
 /*
  * Created by Sudhanshu Kumar on 04/09/23.
